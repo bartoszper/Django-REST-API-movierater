@@ -11,3 +11,4 @@ class AdminFilm(admin.ModelAdmin):
 admin.site.register(Film, AdminFilm)
 admin.site.register(ExtraInfo)
 admin.site.register(Recenzja)
+admin.site.register(Aktor)
