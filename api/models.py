@@ -27,6 +27,10 @@ class Film(models.Model):
 
 class Recenzja(models.Model):
     opis = models.TextField(default='')
-    gwizdki = models.IntegerField(default=5)
-    film = models.ForeignKey(Film, on_delete=models.CASCADE)
+    gwiazdki = models.IntegerField(default=5)
+    film = models.ForeignKey(Film, on_delete=models.CASCADE, related_name='recenzje')
 
+class Aktor(models.Model):
+    imie = models.CharField(max_length=32)
+    nazwisko = models.CharField(max_length=32)
+    filmy = models.ManyToManyField(Film)
