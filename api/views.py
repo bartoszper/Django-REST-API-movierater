@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import viewsets
 from .serializers import UserSerializer
-from .models import Film
-from .serializers import FilmSerializer
+from .models import Film, Recenzja, Aktor
+from .serializers import FilmSerializer, RecenzjaSerializer, AktorSerializer
 from rest_framework.response import Response
 from django.http.response import HttpResponseNotAllowed
 from rest_framework.decorators import action
@@ -76,7 +76,20 @@ class FilmViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+class RecenzjaViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Recenzja.objects.all()
+    serializer_class = RecenzjaSerializer
 
+class AktorViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Aktor.objects.all()
+    serializer_class = AktorSerializer
+    
 
 
 
