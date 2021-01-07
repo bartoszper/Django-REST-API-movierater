@@ -25,3 +25,8 @@ class Film(models.Model):
     def __str__(self):
         return self.tytul
 
+class Recenzja(models.Model):
+    opis = models.TextField(default='')
+    gwizdki = models.IntegerField(default=5)
+    film = models.ForeignKey(Film, on_delete=models.CASCADE)
+
