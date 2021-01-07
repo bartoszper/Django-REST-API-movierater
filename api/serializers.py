@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Film
+from .models import Film, ExtraInfo
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -11,6 +11,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class FilmSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Film
-        fields = ['id','tytul', 'opis', 'po_premierze', 'premiera','rok','imdb_rating']
+        fields = ['id','tytul', 'opis', 'po_premierze', 'premiera','rok','imdb_rating',]
+
+class ExtraInfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ExtraInfo
+        fields = ['czas_trwania','rodzaj']
 
 
