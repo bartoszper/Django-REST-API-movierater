@@ -17,7 +17,14 @@ class ExtraInfoSerializer(serializers.HyperlinkedModelSerializer):
 class RecenzjaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Recenzja
-        fields = ['opis','gwiazdki']
+        fields = ('id','opis','gwiazdki','film')
+
+    def create(self, instance, validated_data):
+        instance.opis = validated_data.get('opis', instance.opis)
+        instance.gwiazdki = validated_data.get('gwiazki', instance.gwiazdki)
+        instance.save()
+
+        return instance
 
 class FilmSerializer(serializers.HyperlinkedModelSerializer):
     extra_info = ExtraInfoSerializer(many=False)
@@ -25,12 +32,13 @@ class FilmSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Film
         fields = ['id','tytul', 'opis', 'po_premierze', 'premiera','rok','imdb_rating','extra_info','recenzje']
+        read_only_fields = ('extra_info','recenzje')
 
 class AktorSerializer(serializers.HyperlinkedModelSerializer):
-    filmy = FilmSerializer(many=True)
+    filmy = FilmSerializer(many=True, read_only=True)
     class Meta:
         model = Aktor
-        fields = ['imie','nazwisko','filmy']
+        fields = ['id','imie','nazwisko','filmy']
     
     # def create(self, validated_data):
     #     filmy = validated_data['filmy']
