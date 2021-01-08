@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from .serializers import UserSerializer
 from .models import Film, Recenzja, Aktor
 from .serializers import FilmSerializer, RecenzjaSerializer, AktorSerializer
@@ -23,8 +23,11 @@ class FilmViewSet(viewsets.ModelViewSet):
     """
     
     serializer_class = FilmSerializer
+    filter_backends = [filters.SearchFilter]
     filterset_fields = ['tytul', 'opis','rok']
-    search_fields = ['tytul', 'opis']
+    search_fields = ('tytul','opis')
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['tytul', 'opis']
 
     def get_queryset(self):
         # rok = self.request.query_params.get('rok',None)
