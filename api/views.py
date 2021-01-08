@@ -7,6 +7,13 @@ from .serializers import FilmSerializer, RecenzjaSerializer, AktorSerializer
 from rest_framework.response import Response
 from django.http.response import HttpResponseNotAllowed
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
+
+
+class FilmyResultsSetPagination(PageNumberPagination):
+    page_size = 2
+    page_size_query_param = 'page_size'
+    max_page_size = 3
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -27,7 +34,8 @@ class FilmViewSet(viewsets.ModelViewSet):
     filterset_fields = ['tytul', 'opis','rok']
     search_fields = ('tytul','opis')
     filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['tytul', 'opis']
+    ordering_fields = '__all__'
+    pagination_class = FilmyResultsSetPagination
 
     def get_queryset(self):
         # rok = self.request.query_params.get('rok',None)
