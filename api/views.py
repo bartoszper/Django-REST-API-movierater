@@ -21,12 +21,23 @@ class FilmViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = Film.objects.all()
+    
     serializer_class = FilmSerializer
+    filterset_fields = ['tytul', 'opis','rok']
+    search_fields = ['tytul', 'opis']
+
+    def get_queryset(self):
+        # rok = self.request.query_params.get('rok',None)
+        # if rok:
+        #     filmy = Film.objects.filter(rok=rok)
+        # else:
+        filmy = Film.objects.all()
+        return filmy
+
 
     def create(self, request, *args, **kwargs):
         #if request.user.is_staff:
-        film = Film.objects.create(tytul=request.data['tytul'], opis=request.data['opis'], po_premierze=request.data['po_premierze'])
+        film = Film.objects.create(tytul=request.data['tytul'], opis=request.data['opis'], po_premierze=request.data['po_premierze'],rok =request.data['rok'])
         serializer = FilmSerializer(film, many=False)
         return Response(serializer.data)
         #else:
@@ -36,6 +47,7 @@ class FilmViewSet(viewsets.ModelViewSet):
         film = self.get_object()
         film.tytul = request.data['tytul']
         film.opis = request.data['opis']
+        film.rok = request.data['rok']
         film.po_premierze = request.data['po_premierze']
         film.save()
         serializer = FilmSerializer(film, many=False)
@@ -89,7 +101,15 @@ class AktorViewSet(viewsets.ModelViewSet):
     """
     queryset = Aktor.objects.all()
     serializer_class = AktorSerializer
-    
+
+    @action(detail=True, methods=['POST'])
+    def add_film(self, request, **kwargs):
+        aktor = self.get_object()
+        film = Film.objects.get(id=request.data['film'])
+        aktor.filmy.add(film)
+
+        serializer = AktorSerializer(aktor, many=False)
+        return Response(serializer.data)
 
 
 
